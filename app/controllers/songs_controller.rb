@@ -1,6 +1,8 @@
 class SongsController < ApplicationController
+  before_action :authenticate_user!, :except => [ :show, :index ]
 
   def index
+    #byebug
     @songs = Song.all
     respond_to do |format|
       format.html # index.html.erb
@@ -27,6 +29,8 @@ class SongsController < ApplicationController
 
   def create
     @song = Song.new(song_params)
+
+    @song.user = current_user
 
     if @song.save
       redirect_to @song
